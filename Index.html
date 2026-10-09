@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PJAYHWATA@zim.co.zw</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f6f6f6;color:#222}
+header{background:#111;color:#fff;padding:16px;text-align:center;position:sticky;top:0;z-index:10}
+header h1{font-size:22px}
+.products{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px}
+.card{background:#fff;border-radius:12px;padding:10px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.card img{width:100%;height:140px;object-fit:cover;border-radius:10px}
+.card h3{font-size:15px;margin:8px 0 4px}
+.card p{font-size:13px;color:#666}
+.price{font-weight:bold;margin:6px 0;color:#0a7d00}
+.btn{width:100%;padding:10px;background:#111;color:#fff;border:none;border-radius:8px;margin-top:6px}
+.btn-whatsapp{background:#25D366}
+#cartBtn{position:fixed;bottom:20px;right:20px;background:#25D366;color:#fff;border:none;border-radius:50px;padding:14px 20px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+#cartBox{display:none;position:fixed;bottom:70px;right:10px;left:10px;background:#fff;border-radius:14px;padding:14px;box-shadow:0 4px 20px rgba(0,0,0,.2);max-height:70vh;overflow:auto}
+</style>
+</head>
+<body>
+
+<header>
+<h1>PJAYHWATA QUALITY GOODS IN RUSAPE</h1>
+<p style="font-size:13px;opacity:.8">Quality goods | RUSAPE DEALS | Order on WhatsApp  | ONLINE DEALS</p>
+</header>
+
+<div class="products" id="products"></div>
+
+<div id="cartBox">
+<h3>Your Cart</h3>
+<div id="cartItems" style="margin:10px 0"></div>
+<p id="total" style="font-weight:bold"></p>
+<button class="btn btn-whatsapp" onclick="orderWhatsApp()">Order on WhatsApp</button>
+<button class="btn" onclick="closeCart()" style="background:#ddd;color:#111">Close</button>
+</div>
+
+<button id="cartBtn" onclick="openCart()">Cart (<span id="count">0</span>)</button>
+
+<script>
+// === EDIT THIS ===
+const myWhatsAppNumber = "263 78 769 5681"; // <-- put your number here
+
+const goods = [
+ {name:"StanleyCups", price:10, img:"/images/IMG_0289.JPG"},
+ {name:"Water bottles 3pcs combo", price:8, img:"/images/IMG_0229.JPG"},
+ {name:"JBL EARPODS", price:10, img:"/images/IMG_0017.JPG"},
+ {name:"JBL HEADPHONES", price:12, img:"/images/IMG_9787.JPG"},
+ {name:"WATCH AND HEADPHONES COMBO", price:20, img:"/images/IMG_0014.JPG"},
+ {name:"Womens Garments", price:12, img:"/images/IMG_8808.JPG"},
+ {name:"Smart Watch",price:15,img:"/images/IMG_0016.JPG"},
+ {name:"Mens Formal Shoes",price:25,img:"/images/IMG-20261008-WA0038.jpg"},
+ {name:"Formal Shoes ",price:"30",img:"/images/IMG-20261008-WA0037.jpg"},
+ {name:"SMEG CUP", price:10,img:"/IMG_6673.JPG"},
+ {name:"8pc combo",price:20,img:"/images/IMG_0371.JPG"},
+ {name:"FF Perfumes", price:5, img:"/images/IMG_9951.JPG"},
+ {name:"TRIPOD STAND",price:15,img:"/IMG_0002.JPG"},
+ {name:"WOMEN'S LOAFER",price:20,img:"/IMG_8727.JPG"},
+ {name:"WOMEN'S BRACELETS",price:5,img:"/IMG_7103.JPG"},
+ {name:"BRACELETS", price:5,img:"/IMG_0096.JPG"},
+ 
+]
+
+let cart = [];
+const list = document.getElementById('products');
+goods.forEach((g,i)=>{
+ list.innerHTML += `
+ <div class="card">
+   <img src="${g.img}">
+   <h3>${g.name}</h3>
+   <p class="price">$${g.price}</p>
+   <button class="btn" onclick="addToCart(${i})">Add to Cart</button>
+ </div>`;
+});
+
+function addToCart(i){ cart.push(goods[i]); document.getElementById('count').innerText=cart.length; openCart(); renderCart(); }
+function renderCart(){
+ let html=""; let total=0;
+ cart.forEach((c,idx)=>{ html+=`${c.name} - $${c.price} <small onclick="cart.splice(${idx},1);renderCart()" style="color:red">[remove]</small><br>`; total+=c.price; });
+ document.getElementById('cartItems').innerHTML=html||"Cart empty";
+ document.getElementById('total').innerText="Total: $"+total;
+ document.getElementById('count').innerText=cart.length;
+}
+function openCart(){ document.getElementById('cartBox').style.display='block'; renderCart(); }
+function closeCart(){ document.getElementById('cartBox').style.display='none'; }
+
+function orderWhatsApp(){
+ if(cart.length==0) return alert("Cart empty");
+ let msg="Hello Pjayhwata, I want to order:%0A";
+ let total=0;
+ cart.forEach(c=>{ msg+=`- ${c.name} $${c.price}%0A`; total+=c.price; });
+ msg+=`%0ATotal: $${total}%0AFrom your website`;
+ window.open(`https://wa.me/${myWhatsAppNumber}?text=${msg}`, '_blank');
+}
+</script>
+</body>
+</html>
